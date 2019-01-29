@@ -1,6 +1,6 @@
 # Scheme Basics
 Read the first two chapters of
-(The Scheme Programming Language)(http://www.scheme.com/tspl4/), and answer the
+[The Scheme Programming Language](http://www.scheme.com/tspl4/), and answer the
 following questions.
 
 Exercise 2.2.1 Convert the following arithmetic expressions into Scheme
