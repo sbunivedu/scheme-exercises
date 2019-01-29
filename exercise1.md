@@ -1,6 +1,6 @@
-# Basics
+# Scheme Basics
 Read the first two chapters of
-[The Scheme Programming Language](http://www.scheme.com/tspl4/), and answer the
+(The Scheme Programming Language)(http://www.scheme.com/tspl4/), and answer the
 following questions.
 
 Exercise 2.2.1 Convert the following arithmetic expressions into Scheme
@@ -130,10 +130,10 @@ algebraic simplifications.
 <summary>Solution</summary>
 
 ```scheme
-(let ([c (* 3 a)])
+(let ((c (* 3 a)))
   (+ (- c b) (+ c b)))
 
-(let ([lst (list a b c)])
+(let ((lst (list a b c)))
   (cons (car lst) (cdr lst)))
 ```
 </details>
@@ -141,9 +141,9 @@ algebraic simplifications.
 Exercise 2.4.2 Determine the value of the following expression. Explain how
 you derived this value.
 ```scheme
-(let ([x 9])
+(let ((x 9))
   (* x
-     (let ([x (/ x 3)])
+     (let ((x (/ x 3)))
        (+ x x))))
 ```
 <details>
@@ -160,19 +160,19 @@ let-bound variable so that none of the variables is shadowed. Verify that the
 value of your expression is the same as that of the original expression.
 a.
 ```scheme
-(let ([x 'a] [y 'b])
-  (list (let ([x 'c]) (cons x y))
-        (let ([y 'd]) (cons x y))))
+(let ((x 'a) (y 'b))
+  (list (let ((x 'c)) (cons x y))
+        (let ((y 'd)) (cons x y))))
 ```
 b.
 ```scheme
-(let ([x '((a b) c)])
-  (cons (let ([x (cdr x)])
+(let ((x '((a b) c)))
+  (cons (let ((x (cdr x)))
           (car x))
-        (let ([x (car x)])
-          (cons (let ([x (cdr x)])
+        (let ((x (car x)))
+          (cons (let ((x (cdr x)))
                   (car x))
-                (cons (let ([x (car x)])
+                (cons (let ((x (car x)))
                         x)
                       (cdr x))))))
 ```
@@ -182,20 +182,20 @@ b.
 
 a.
 ```scheme
-(let ([x 'a] [y 'b])
-  (list (let ([x1 'c]) (cons x1 y))
-        (let ([y1 'd]) (cons x y1))))
+(let ((x 'a) (y 'b))
+  (list (let ((x1 'c)) (cons x1 y))
+        (let ((y1 'd)) (cons x y1))))
 => '((c . b) (a . d))
 ```
 b.
 ```scheme
-(let ([x '((a b) c)])
-  (cons (let ([x1 (cdr x)])
+(let ((x '((a b) c)))
+  (cons (let ((x1 (cdr x)))
           (car x1))
-        (let ([x2 (car x)])
-          (cons (let ([x3 (cdr x2)])
+        (let ((x2 (car x)))
+          (cons (let ((x3 (cdr x2)))
                   (car x3))
-                (cons (let ([x4 (car x2)])
+                (cons (let ((x4 (car x2)))
                         x4)
                       (cdr x2))))))
 => '(c b a b)
@@ -205,22 +205,22 @@ b.
 Exercise 2.5.1 Determine the values of the expressions below.
 a.
 ```scheme
-(let ([f (lambda (x) x)])
+(let ((f (lambda (x) x)))
   (f 'a))
 ```
   b.
 ```scheme
-(let ([f (lambda x x)])
+(let ((f (lambda x x)))
   (f 'a))
 ```
   c.
 ```scheme
-(let ([f (lambda (x . y) x)])
+(let ((f (lambda (x . y) x)))
   (f 'a))
 ```
 d.
 ```scheme
-(let ([f (lambda (x . y) y)])
+(let ((f (lambda (x . y) y)))
   (f 'a))
 ```
 
@@ -228,16 +228,16 @@ d.
 <summary>Solution</summary>
 
 ```scheme
-(let ([f (lambda (x) x)])
+(let ((f (lambda (x) x)))
   (f 'a)) => 'a
 
-(let ([f (lambda x x)])
+(let ((f (lambda x x)))
     (f 'a)) => '(a)
 
-(let ([f (lambda (x . y) x)])
+(let ((f (lambda (x . y) x)))
   (f 'a)) => 'a
 
-(let ([f (lambda (x . y) y)])
+(let ((f (lambda (x . y) y)))
   (f 'a)) => '()
 ```
 
@@ -249,7 +249,7 @@ Exercise 2.5.2 How might the primitive procedure `list` be defined?
 <summary>Solution</summary>
 
 ```scheme
-(let ([mylist (lambda x x)])
+(let ((mylist (lambda x x)))
   (mylist 'a 1 #t)) => '(a 1 #t)
 ```
 </details>
@@ -268,13 +268,13 @@ d.
 e.
 ```
 (lambda (x)
-  (let ([z (cons x y)])
+  (let ((z (cons x y)))
     (x y z)))
 ```
 f.
 ```
 (lambda (x)
-  (let ([y (cons x y)])
+  (let ((y (cons x y)))
     (x y z)))
 ```
 
@@ -382,7 +382,7 @@ Have it return the first list if they have the same length.
 ```scheme
 (define shorter
   (lambda (lst1 lst2)
-    (let ([l1 (length lst1)][l2 (length lst2)])
+    (let ((l1 (length lst1))(l2 (length lst2)))
       (if (or (< l1 l2 ) (= l1 l2))
           lst1
           lst2))))
@@ -415,10 +415,10 @@ which is the object.
 ```
 (make-list 7 '()) <graphic> (() () () () () () ())
 ```
-[Hint: The base test should be `(= n 0)`, and the recursion step should involve
+(Hint: The base test should be `(= n 0)`, and the recursion step should involve
 `(- n 1)`. Whereas `()` is the natural base case for recursion on lists, `0` is
 the natural base case for recursion on nonnegative integers. Similarly,
-subtracting 1 is the natural way to bring a nonnegative integer closer to 0.]
+subtracting 1 is the natural way to bring a nonnegative integer closer to 0.)
 
 Exercise 2.8.4 The procedures `list-ref` and `list-tail` return the nth element
 and nth tail of a list ls.
@@ -432,14 +432,14 @@ and nth tail of a list ls.
 Exercise 2.8.5
 Exercise 2.7.2 had you use `length` in the definition of shorter, which returns
 the shorter of its two list arguments, or the first if the two have the same
-length. Write `shorter` without using `length`. [Hint: Define a recursive helper,
-`shorter?`, and use it in place of the length comparison.]
+length. Write `shorter` without using `length`. (Hint: Define a recursive helper,
+`shorter?`, and use it in place of the length comparison.)
 
 Exercise 2.8.6 All of the recursive procedures shown so far have been directly
 recursive. That is, each procedure directly applies itself to a new argument.
 It is also possible to write two procedures that use each other, resulting in
 indirect recursion. Define the procedures `odd?` and `even?`, each in terms of the
-other. [Hint: What should each return when its argument is 0?]
+other. (Hint: What should each return when its argument is 0?)
 ```
 (even? 17) => #f
 (odd? 17) => #t
@@ -450,4 +450,4 @@ of pairs and returns a pair of lists as follows.
 ```
 (transpose '((a . 1) (b . 2) (c . 3))) => ((a b c) 1 2 3)
 ```
-[Hint: `((a b c) 1 2 3)` is the same as `((a b c) . (1 2 3))`.]
+(Hint: `((a b c) 1 2 3)` is the same as `((a b c) . (1 2 3))`.)
