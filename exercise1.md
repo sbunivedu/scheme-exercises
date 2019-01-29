@@ -14,6 +14,7 @@ expressions and evaluate them.
 
 <details>
 <summary>Solution</summary>
+
 ```scheme
 (+ (* 1.2 (- 2 1/3)) -8.7) => -6.699999999999999
 (+ (+ 2/3 4/9) (- 5/11 4/3)) => 23/99
@@ -28,7 +29,7 @@ different types of numeric arguments.
 
 Exercise 2.2.3 Determine the values of the following expressions. Use your
 Scheme system to verify your answers.
-```
+```scheme
 (cons 'car 'cdr)
 (list 'this '(is silly))
 (cons 'is '(this silly?))
@@ -46,8 +47,10 @@ cons
 ((car (list + - * /)) 2 3)
 ```
 
-Solutions:
-```
+<details>
+<summary>Solution</summary>
+
+```scheme
 (cons 'car 'cdr) => '(car . cdr)
 (list 'this '(is silly)) => '(this (is silly))
 (quote (+ 2 3)) => '(+ 2 3)
@@ -63,35 +66,44 @@ cons => #<procedure:cons>
 (+ (car '(2 3)) (car (cdr '(2 3))))
 ((car (list + - * /)) 2 3)
 ```
+</details>
+
 Exercise 2.2.4 `(car (car '((a b) (c d))))` yields `a`. Determine which
 compositions of `car` and `cdr` applied to `((a b) (c d))` yield `b`, `c`, and `d`.
 
-Solutions:
-```
+<details>
+<summary>Solution</summary>
+
+```scheme
 (cadar '((a b) (c d))) => 'b
 (caadr '((a b) (c d))) => 'c
 (cadadr '((a b) (c d))) => 'd
 ```
+</details>
 
 Exercise 2.2.5 Write a Scheme expression that evaluates to the following
 internal list structure.
 ![box diagram](./images/2.gif)
 
-Solutions:
-```
+<details>
+<summary>Solution</summary>
+
+```scheme
 (list (cons 'a 'b) (list (list 'c) 'd) '()) => '((a . b) ((c) d) ())
 ```
+</details>
 
 Exercise 2.2.6 Draw the internal list structure produced by the expression below.
-```
+```scheme
 (cons 1 (cons '(2 . ((3) . ())) (cons '(()) (cons 4 5))))
 ```
 
 <details>
 <summary>Solution</summary>
-yes.
+
 ![box diagram](./images/box-diagram.png)
 </details>
+
 Exercise 2.2.7 The behavior of `(car (car (car '((a b) (c d)))))` is undefined
 because `(car '((a b) (c d)))` is `(a b)`, `(car '(a b))` is `a`, and `(car 'a)`
 is undefined. Determine all legal compositions of `car` and `cdr` applied to
@@ -102,7 +114,7 @@ Try to explain how Scheme expressions are evaluated. Does your explanation
 cover the last example in Exercise 2.2.3?
 
 Exercise 2.3.1 Write down the steps necessary to evaluate the expression below.
-```
+```scheme
 ((car (cdr (list + - * /))) 17 5)
 ```
 
@@ -114,36 +126,46 @@ algebraic simplifications.
 (cons (car (list a b c)) (cdr (list a b c)))
 ```
 
-Solutions:
 <details>
 <summary>Solution</summary>
+
 ```scheme
-(+ (- (* 3 a) b) (+ (* 3 a) b))
-(cons (car (list a b c)) (cdr (list a b c)))
+(let ([c (* 3 a)])
+  (+ (- c b) (+ c b)))
+
+(let ([lst (list a b c)])
+  (cons (car lst) (cdr lst)))
 ```
 </details>
 
 Exercise 2.4.2 Determine the value of the following expression. Explain how
 you derived this value.
-```
+```scheme
 (let ([x 9])
   (* x
      (let ([x (/ x 3)])
        (+ x x))))
 ```
+<details>
+<summary>Solution</summary>
+
+The outer `let` binds `x` to 9 within its body, which is the second `let`
+expression. The inner `let` binds `x` to `(/ x 3)` within its body, which
+is the expression `(+ x x)`. There for the value of the expression is 54.
+</details>
 
 Exercise 2.4.3
 Rewrite the following expressions to give unique names to each different
 let-bound variable so that none of the variables is shadowed. Verify that the
 value of your expression is the same as that of the original expression.
 a.
-```
+```scheme
 (let ([x 'a] [y 'b])
   (list (let ([x 'c]) (cons x y))
         (let ([y 'd]) (cons x y))))
 ```
 b.
-```
+```scheme
 (let ([x '((a b) c)])
   (cons (let ([x (cdr x)])
           (car x))
@@ -155,29 +177,82 @@ b.
                       (cdr x))))))
 ```
 
+<details>
+<summary>Solution</summary>
+
+a.
+```scheme
+(let ([x 'a] [y 'b])
+  (list (let ([x1 'c]) (cons x1 y))
+        (let ([y1 'd]) (cons x y1))))
+=> '((c . b) (a . d))
+```
+b.
+```scheme
+(let ([x '((a b) c)])
+  (cons (let ([x1 (cdr x)])
+          (car x1))
+        (let ([x2 (car x)])
+          (cons (let ([x3 (cdr x2)])
+                  (car x3))
+                (cons (let ([x4 (car x2)])
+                        x4)
+                      (cdr x2))))))
+=> '(c b a b)
+```
+</details>
+
 Exercise 2.5.1 Determine the values of the expressions below.
 a.
-```
+```scheme
 (let ([f (lambda (x) x)])
   (f 'a))
 ```
   b.
-```
+```scheme
 (let ([f (lambda x x)])
   (f 'a))
 ```
   c.
-```
+```scheme
 (let ([f (lambda (x . y) x)])
   (f 'a))
 ```
 d.
-```
+```scheme
 (let ([f (lambda (x . y) y)])
   (f 'a))
 ```
 
-Exercise 2.5.2 How might the primitive procedure list be defined?
+<details>
+<summary>Solution</summary>
+
+```scheme
+(let ([f (lambda (x) x)])
+  (f 'a)) => 'a
+
+(let ([f (lambda x x)])
+    (f 'a)) => '(a)
+
+(let ([f (lambda (x . y) x)])
+  (f 'a)) => 'a
+
+(let ([f (lambda (x . y) y)])
+  (f 'a)) => '()
+```
+
+</details>
+
+Exercise 2.5.2 How might the primitive procedure `list` be defined?
+
+<details>
+<summary>Solution</summary>
+
+```scheme
+(let ([mylist (lambda x x)])
+  (mylist 'a 1 #t)) => '(a 1 #t)
+```
+</details>
 
 Exercise 2.5.3 List the variables that occur free in each of the lambda
 expressions below. Do not omit variables that name primitive procedures such
@@ -203,6 +278,19 @@ f.
     (x y z)))
 ```
 
+<details>
+<summary>Solution</summary>
+
+```scheme
+a. x
+b. +
+c. f, y
+d. f, y
+e. cons, y
+f. cons, z
+```
+</details>
+
 Exercise 2.6.1 What would happen if you were to type
 `(double-any double-any double-any)` given the definition of double-any from
 the beginning of this section?
@@ -212,36 +300,103 @@ the beginning of this section?
     (f x x)))
 ```
 
+<details>
+<summary>Solution</summary>
+The evaluation will keep running in an infinite recursion.
+</details>
+
 Exercise 2.6.2 A more elegant (though possibly less efficient) way to define
 `cadr` and `cddr` than given in this section is to define a procedure that
 composes two procedures to create a third. Write the procedure compose, such
 that `(compose p1 p2)` is the composition of `p1` and `p2` (assuming both take
-one argument). That is, (compose p1 p2) should return a new procedure of one
-argument that applies p1 to the result of applying p2 to the argument. Use
+one argument). That is, `(compose p1 p2)` should return a new procedure of one
+argument that applies `p1` to the result of applying `p2` to the argument. Use
 compose to define `cadr` and `cddr`.
+
+<details>
+<summary>Solution</summary>
+
+```scheme
+(define compose
+  (lambda (p1 p2)
+    (lambda (x)
+      (p1 (p2 x)))))
+
+(define cadr1 (compose car cdr))
+(define cddr1 (compose cdr cdr))
+
+(cadr1 '(a b c)) => 'b
+(cddr1 '(a b c)) => '(c)
+```
+</details>
 
 Exercise 2.6.3 Scheme also provides `caar`, `cdar`, `caaar`, `caadr`, and so on,
 with any combination of up to four a's (representing `car`) and d's
 (representing `cdr`) between the `c` and the `r` (see Section 6.3). Define
 each of these with the compose procedure of the preceding exercise.
 
+<details>
+<summary>Solution</summary>
+
+```scheme
+(define caar (compose car car))
+(define cdar (compose cdr car))
+(define caaar (compose car car car))
+(define caadr (compose car car cdr))
+```
+</details>
+
 Exercise 2.7.1 Define the predicate atom?, which returns true if its argument
 is not a pair and false if it is.
+
+<details>
+<summary>Solution</summary>
+
+```scheme
+(define atom?
+  (lambda (x)
+    (if (pair? x)
+        #f
+        #t)))
+(atom? 1)
+(atom? "a")
+(atom? #t)
+(atom? 'a)
+(atom? '(a b))
+(atom? (cons 'a 'b))
+```
+</details>
 
 Exercise 2.7.2 The procedure length returns the length of its argument, which
 must be a list. For example, `(length '(a b c))` is 3. Using length, define
 the procedure shorter, which returns the shorter of two list arguments.
 Have it return the first list if they have the same length.
-```
+```scheme
 (shorter '(a b) '(c d e)) => (a b)
 (shorter '(a b) '(c d)) => (a b)
 (shorter '(a b) '(c)) => (c)
 ```
+<details>
+<summary>Solution</summary>
+
+```scheme
+(define shorter
+  (lambda (lst1 lst2)
+    (let ([l1 (length lst1)][l2 (length lst2)])
+      (if (or (< l1 l2 ) (= l1 l2))
+          lst1
+          lst2))))
+
+(shorter '(1 1 1) '(2 2 2))
+(shorter '(1 2 3 4) '(1 2 3))
+(shorter '(1 2 3) '(1 2 3 4))
+```
+</details>
 
 Exercise 2.8.1 Describe what would happen if you switched the order of the
 arguments to `cons` in the definition of `tree-copy`.
 
-```
+```scheme
 (define tree-copy
   (lambda (tr)
     (if (not (pair? tr))
