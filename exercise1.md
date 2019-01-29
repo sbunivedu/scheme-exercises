@@ -1,4 +1,7 @@
-# Solutions
+# Basics
+Read the first two chapters of
+[The Scheme Programming Language](http://www.scheme.com/tspl4/), and answer the
+following questions.
 
 Exercise 2.2.1 Convert the following arithmetic expressions into Scheme
 expressions and evaluate them.
@@ -9,13 +12,15 @@ expressions and evaluate them.
 1 × -2 × 3 × -4 × 5 × -6 × 7
 ```
 
-Solutions:
-```
+<details>
+<summary>Solution</summary>
+```scheme
 (+ (* 1.2 (- 2 1/3)) -8.7) => -6.699999999999999
 (+ (+ 2/3 4/9) (- 5/11 4/3)) => 23/99
 (+ 1 (+ 1 (+ 2 (+ 1 (+ 1 1/2))))) -> 6(1/2)
 (* 1 (* -2 (* 3 (* -4 (* 5 (* -6 7)))))) => -5040
 ```
+</details>
 
 Exercise 2.2.2 Experiment with the procedures `+`, `-`, `*`, and `/` to
 determine Scheme's rules for the type of value returned by each when given
