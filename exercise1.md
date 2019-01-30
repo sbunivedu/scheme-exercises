@@ -86,8 +86,8 @@ compositions of `car` and `cdr` applied to `((a b) (c d))` yield `b`, `c`, and `
 </details>
 
 ## Exercise 2.2.5
-Write a Scheme expression that evaluates to the following
-internal list structure.
+Write a Scheme expression that evaluates to the following internal list structure.
+
 ![box diagram](./images/2.gif)
 
 <details>
