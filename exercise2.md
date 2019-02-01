@@ -10,7 +10,7 @@ numbers.
 <details>
 <summary>Solution</summary>
 
-~~~~
+```
 <list-of-numbers> ::= () | (<number> . <list-of-numbers>)
 
 <list-of-numbers>
@@ -18,7 +18,7 @@ numbers.
 => (-7 . <list-of-numbers>)
 => (-7 . (<number> . <list-of-numbers>))
 => (-7 . (3 . <list-of-numbers>))
-~~~~
+```
 </details>
 
 ## Exercise 1.2 [*]
@@ -26,12 +26,16 @@ Rewrite the `<datum>` grammar without using the Kleene star or plus. Then
 indicate the changes to the above derivation that are required by this revised
 grammar.
 
+<details>
+<summary>Solution</summary>
+
 ```
 <list>          ::= (<datum> . <list>)
 <dotted-datum>  ::= (<datum>) | (<datum> . <dotted-datum>)
 <vector>        ::= #() | #(<datum> <vector>)
 <data>          ::= datum | datum data
 ```
+</details>
 
 ## Exercise 1.3 [*]
 Write a syntactic derivation that proves `(a "mixed" #(bag (of . data)))`
@@ -57,7 +61,10 @@ In our example, we began by eliminating the Kleene star in the grammar for
 recursion can be expressed using `map`. Write `subst` following the original
 grammar by using `map`.
 
-```
+<details>
+<summary>Solution</summary>
+
+```scheme
 (define subst
   (lambda (new old slist)
     (if (null? slist)
@@ -77,6 +84,7 @@ grammar by using `map`.
 
 (subst 'a 'b '((b c) (b () d))); => '((a c) (a () d))
 ```
+</details>
 
 Exercise 1.13 [**]
 Rewrite the grammar for `<s-list>` to use Kleene star, and rewrite
@@ -86,7 +94,10 @@ Rewrite the grammar for `<s-list>` to use Kleene star, and rewrite
                     ::= ({<symbol-expression>}*)
 <symbol-expression> ::= <symbol> | <s-list>
 ```
-```
+<details>
+<summary>Solution</summary>
+
+```scheme
 (define notate-depth
   (lambda (slist)
     (notate-depth-in-s-list slist 0)))
@@ -108,6 +119,7 @@ Rewrite the grammar for `<s-list>` to use Kleene star, and rewrite
 ;> (notate-depth '(a (b () c) ((d)) e))
 ;((a 0) ((b 1) () (c 1)) (((d 2))) (e 0)))
 ```
+</details>
 
 Exercise 1.14 [**]
 Given the assumption `0 ≤ n < length(von)`, prove that `partial-vector-sum` is
@@ -231,13 +243,19 @@ and returns `#f` otherwise.
 #t
 > (exists? number? '(a b c d e))
 #f
+```
 
+<details>
+<summary>Solution</summary>
+
+```scheme
 (define (exists? pred lst)
    (if (null? lst)
        #f
        (or (pred (car lst))
             (exists? pred (cdr lst)))))
 ```
+</details>
 
 6. `(vector-index pred v)` returns the zero-based index of the first element of
 `v` that satisfies the predicate `pred`, or `#f` if no element of `v` satisfies
@@ -247,7 +265,12 @@ and returns `#f` otherwise.
 2
 > (vector-ref '#(a b c) (vector-index (lambda (x) (eqv? x 'b)) '#(a b c)))
 b
+```
 
+<details>
+<summary>Solution</summary>
+
+```scheme
 (define vector-index
   (lambda (pred v)
     (vector-index-rec pred v (vector-length v))))
@@ -267,6 +290,7 @@ b
                     (vector-index-rec pred v (- n 1))))))
       (vector-index-rec pred v (vector-length v)))))
 ```
+</details>
 
 7. `(list-set lst n x)` returns a list like `lst`, except that the n-th element,
 using zero-based indexing, is `x`.
@@ -275,20 +299,31 @@ using zero-based indexing, is `x`.
 (a b (1 2) d)
 > (list-ref (list-set '(a b c d) 3 '(1 5 10)) 3)
 (1 5 10)
+```
 
+<details>
+<summary>Solution</summary>
+
+```scheme
 (define (list-set lst n x)
   (if (= n 0)
       (cons x (cdr lst))
       (cons (car lst)
             (list-set (cdr lst) (- n 1) x))))
 ```
+</details>
 
 8. `(product los1 los2)` returns a list of 2-lists that represents the
 Cartesian product of `los1` and `los2`. The 2-lists may appear in any order.
 ```
 > (product '(a b c) '(x y))
 ((a x) (a y) (b x) (b y) (c x) (c y))
+```
 
+<details>
+<summary>Solution</summary>
+
+```scheme
 (define (product los1 los2)
   (if (null? los1)
       '()
@@ -309,6 +344,7 @@ Cartesian product of `los1` and `los2`. The 2-lists may appear in any order.
                    los2)
             (product (cdr los1) los2))))
 ```
+</details>
 
 9. `(down lst)` wraps parentheses around each top-level element of `lst`.
 ```
@@ -318,13 +354,19 @@ Cartesian product of `los1` and `los2`. The 2-lists may appear in any order.
 (((a)) ((fine)) ((idea)))
 > (down '(a (more (complicated)) object))
 ((a) ((more (complicated))) (object))
+```
 
+<details>
+<summary>Solution</summary>
+
+```scheme
 (define (down lst)
   (if (null? lst)
       '()
       (cons (list (car lst))
             (down (cdr lst)))))
 ```
+</details>
 
 10. `(vector-append-list v lst)` returns a new vector with the elements of `lst`
 attached to the end of `v`. Do this without using `vector->list`, `list->vector`,

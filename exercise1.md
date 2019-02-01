@@ -173,6 +173,7 @@ is the expression `(+ x x)`. There for the value of the expression is 54.
 Rewrite the following expressions to give unique names to each different
 let-bound variable so that none of the variables is shadowed. Verify that the
 value of your expression is the same as that of the original expression.
+
 a.
 ```scheme
 (let ((x 'a) (y 'b))
@@ -219,6 +220,7 @@ b.
 
 ## Exercise 2.5.1
 Determine the values of the expressions below.
+
 a.
 ```scheme
 (let ((f (lambda (x) x)))
@@ -275,6 +277,7 @@ How might the primitive procedure `list` be defined?
 List the variables that occur free in each of the lambda
 expressions below. Do not omit variables that name primitive procedures such
 as `+` or `cons`.
+
 a.
 ```scheme
 (lambda (f x) (f x))
