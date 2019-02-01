@@ -27,9 +27,9 @@ indicate the changes to the above derivation that are required by this revised
 grammar.
 
 ```
-<list> 		      ::= (<datum> . <list>)
-<dotted-datum> 	::= (<datum>) | (<datum> . <dotted-datum>)
-<vector>		    ::= #() | #(<datum> <vector>)
+<list>          ::= (<datum> . <list>)
+<dotted-datum>  ::= (<datum>) | (<datum> . <dotted-datum>)
+<vector>        ::= #() | #(<datum> <vector>)
 <data>          ::= datum | datum data
 ```
 
@@ -83,7 +83,7 @@ Rewrite the grammar for `<s-list>` to use Kleene star, and rewrite
 `notate-depth-in-s-list` using `map`.
 ```
 <s-list>            ::= ()
-				            ::= ({<symbol-expression>}*)
+                    ::= ({<symbol-expression>}*)
 <symbol-expression> ::= <symbol> | <s-list>
 ```
 ```
