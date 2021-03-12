@@ -133,3 +133,74 @@ write procedure `map1` that maps a one-argument procedure over a single list.
 
 (map1 abs '(1 -2 3 -4 5 -6)); => '(1 2 3 4 5 6)
 ```
+
+Write a function, `calculator`, which takes an infix arithmetic expression and evaluates it. For
+example,
+```
+> (calculator 42)
+42
+> (calculator ’(1 + 2))
+3
+> (calculator ’(1 + (2 * 8)))
+17
+> (calculator ’((((2 + 3) * 2) / 5) + (17 - 1))
+18
+```
+You may assume that all sub-expressions are parenthesized so that you don’t need to worry
+about precedence. Also, you need only implement the four basic arithmetic functions,
+namely, plus, minus, times and divide.
+
+Write a function, `infix->prefix`, which takes an infix arithmetic expression and returns the
+corresponding prefix expression.
+```
+> (infix->prefix 42)
+42
+> (infix->prefix ’(1 + 2))
+(+ 1 2)
+> (infix->prefix ’(1 + (2 * 8)))
+(+ 1 (* 2 8))
+> (infix->prefix ’((((2 + 3) * 2) / 5) + (17 - 1))
+(+ (/ (* (+ 2 3) 2) 5) (- 17 1))
+```
+
+Define a function `iota-iota` that takes an integer i as its argument and returns a list of pairs of
+integers such that
+```
+> (iota-iota 1)
+((1 . 1))
+> (iota-iota 2)
+((1 . 1) (1 . 2) (2 . 1) (2 .2))
+> (iota-iota 3)
+((1 . 1) (1 . 2) (1 . 3) (2 . 1) (2 . 2) (2 . 3)
+(3 . 1) (3 . 2) (3 . 3))
+```
+All helper functions should be tail-recursive and should be defined within the
+body of `iota-iota` using `letrec`.
+
+Define a tail-recursive function digits->number that takes a list of digits and returns the
+number represented by those digits. For example,
+```
+> (digits->number ’(7 6 1 5))
+7615
+```
+Any helper functions you need should be defined within the body of `digits->number` using
+`letrec`.
+
+Write a function, `cond->if`, which takes a `cond` expression, and transforms it into a set of
+nested `if` expressions. For example,
+```
+> (cond->if ’(cond ((> x y) (- x y)) ((< x y) (- y x)) (else 0)))
+(if (> x y) (- x y) (if (< x y) (- y x) 0))
+>
+```
+
+Write a tail-recursive function, `cos`, which takes a number, `x`, as its argument and returns
+`cos(x)`. Your function should approximate `cos(x)` by summing the first 100 terms of the
+following Taylor series:
+```
+cos(x) = x^0/0!-x^2/2!+x^4/4!-x^6/6!+x^8/8!-...
+```
+Any helper functions you need should be defined within the body of `sin` using `letrec`. Note:
+There is a good way and a bad way to do this. The good way avoids computing the factorial
+and the power of `x` which appear in each term in the series from scratch each time. In other
+words, do not use or define `fact` or `expt`.
