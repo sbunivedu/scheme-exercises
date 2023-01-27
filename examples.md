@@ -1,3 +1,55 @@
+Here are some examples of simple expressions in Scheme:
+
+```scheme
+486
+(+ 137 349)
+(/ 10 5)
+(/ 10 3)
+(+ 2.7 10)
+(+ (* 3 (+ (* 2 4) (+ 3 5))) (+ (- 10 7) 6))
+(+ (* 3
+      (+ (* 2 4)
+         (+ 3 5)))
+   (+ (- 10 7)
+      6))
+
+(define size 2)
+size
+(* 5 size)
+
+; use names to refer to computational objects
+(define pi 3.14159)
+(define radius 10)
+(* pi (* radius radius))
+(define circumference (* 2 pi radius))
+circumference
+
+; procedures and the processes they generate
+; linear recursive process
+(require racket/trace)
+
+(define (fact n)
+  (if (= n 1)
+      1
+      (* n (fact (- n 1)))))
+
+(trace fact)
+
+; linear iterative process
+
+(define (fact n)
+  (fact-iter 1 1 n))
+
+(define (fact-iter product counter max-count)
+  (if (> counter max-count)
+      product
+      (fact-iter (* counter product)
+                 (+ counter 1)
+                 max-count)))
+
+(trace fact-iter)
+```
+
 
 Write a `length` function to find the length of a proper list.
 ```

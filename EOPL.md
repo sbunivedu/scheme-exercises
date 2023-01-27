@@ -1,12 +1,8 @@
-# Scheme Basics
-Read the first two chapters of
-EOPL: Essentials of Programming Languages (2nd edition), and answer the
-following questions.
+The following exercises are from [Essentials of Programming Languages (3d edition)].
 
 ## Exercise 1.1 [*]
 
-Write a syntactic derivation that proves `(-7 . (3 . (14 . ())))` is a list of
-numbers.
+Write a syntactic derivation that proves `(-7 . (3 . (14 . ())))` is a list of numbers.
 <details>
 <summary>Solution</summary>
 
@@ -103,7 +99,7 @@ Rewrite the grammar for `<s-list>` to use Kleene star, and rewrite
     (notate-depth-in-s-list slist 0)))
 
 (define notate-depth-in-s-list
-  (lambda (slist d)                     
+  (lambda (slist d)
     (if (null? slist)
       '()
       (map (lambda (x)
