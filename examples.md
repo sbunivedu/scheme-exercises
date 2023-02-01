@@ -50,6 +50,119 @@ circumference
 (trace fact-iter)
 ```
 
+More examples:
+```scheme
+; Literals
+"Hello, World" ; string
+'HelloWorld    ; symbol
+*              ; primitive
+#t             ; boolean
+#f             ; boolean
+#\A            ; character
+
+; Numeric data types:
+10             ; integer
+#b101          ; binary
+#o101          ; octal
+#x101          ; hexdecimal
+3.14           ; real
+7/3            ; fraction
+4+2i           ; imaginary
+
+; Symbols and strings
+(symbol? "Hello")
+(symbol? 'World) ; simple is unique (same object/entity)
+(string? "Hello")
+(string? 'World)
+(symbol->string 'hello)
+(string->symbol "World")
+
+; Scheme uses prefix notation: the operator comes first
+(+ 1 2)
+(sqrt (+ (* 4 4) (* 3 3)))
+(sqrt -1)
+(/ 743 9)
+(/ 743 9.0)
+(quotient 17 3)
+(remainder 17 3)
+(* 123456789123456789 123456789123456789 123456789123456789)
+
+; Associate the value 5 with the name "x"
+(define x 5)
+(* 2 x)  
+
+; Define a new function
+(define half-it
+  (lambda (x)
+          (/ x 2)))
+
+; Lists
+(list 1 2 3 4)
+(define lst (list 1 2 3 4))
+(define lst2 '(1 2 3 4))
+lst
+lst2
+(append (list 1 2 3 4) '(5 6 7 8))
+
+; A scheme form is something that you ask Scheme to evaluate (expression)
+1
+"Hello World!"
+(+ 1 2)
+(+ 1 2 3 4)
+
+; Comments start with a semicolon
+#; (comment out an entire form)
+#; (define i-am-ignored
+     (lambda (x)
+       (* x 0))) 
+
+(define mynumber 10)
+(define 1#$#&%FV 5)
+(newline)
+
+; number predicates
+(integer? 3)
+(integer? 3.0)
+(integer? (* 3 1/3))
+(integer? (* 3 (/ 1 3)))
+
+(real? 3)
+(real? 3.0)
+(real? 2+i)
+(real? 2+0i)
+
+(rational? 1/3)
+(complex? 2+i)
+(complex? 2)
+(complex? 2+0i)
+(rational? 2+0i)
+
+(number? "one")
+(number? '3)
+
+; checking equality
+(= 32 (* 4 8))
+;(= 'Hello 'Hello)
+(eq? 'Hello 'Hello)
+(eq? 'Hello "Hello")
+(eq? "Hello" "Hello")
+(eq? (symbol->string 'Hello) "Hello") ; not same instance
+(eq? '(1 2 3) '(1 2 3))
+
+(equal? 32 (* 4 8))
+(equal? 'Hello 'Hello)
+(equal? 'Hello 'Hello)
+(equal? 'Hello "Hello")
+(equal? "Hello" "Hello")
+(equal? (symbol->string 'Hello) "Hello") ; not same instance
+(equal? '(1 2 3) '(1 2 3))
+
+(define x 10)
+
+(define trip  ; define associates a name with a form
+  (lambda (x) ; lambda defines a procedure
+    (* 3 x))) ; this form associates the name "trip" to the lambda expression
+```
 
 Write a `length` function to find the length of a proper list.
 ```
