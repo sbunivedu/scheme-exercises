@@ -96,14 +96,6 @@ More examples:
   (lambda (x)
           (/ x 2)))
 
-; Lists
-(list 1 2 3 4)
-(define lst (list 1 2 3 4))
-(define lst2 '(1 2 3 4))
-lst
-lst2
-(append (list 1 2 3 4) '(5 6 7 8))
-
 ; A scheme form is something that you ask Scheme to evaluate (expression)
 1
 "Hello World!"
@@ -162,6 +154,82 @@ lst2
 (define trip  ; define associates a name with a form
   (lambda (x) ; lambda defines a procedure
     (* 3 x))) ; this form associates the name "trip" to the lambda expression
+```
+
+Scheme lists:
+```
+; Lists
+(list 1 2 3 4)
+(define lst (list 1 2 3 4))
+(define lst2 '(1 2 3 4))
+lst
+lst2
+(append (list 1 2 3 4) '(5 6 7 8))
+(list list)
+
+; Evaluate the following and explain your answers using box diagrams.
+(car (cons "head" "tail"))
+(cdr (cons "head" "tail"))
+(car (cdr (cons 1 (cons 2 3))))
+(cons (cdr (cons 1 2)) (cdr (cons 3 4)) )
+
+; Evaluate the following:
+(car '(1 . 2))
+(cons 1 null)
+(cons 1 (cons 2 3))
+
+"Does (cons 1 null) display (1 . null) ?"
+(cons 1 null)
+
+"Does (cons 1 (cons 2 3)) display (1 . ( 2 . 3)) ?"
+(cons 1 (cons 2 3))
+
+; Actual displays: (1), (1 2 . 3)
+; Note: Remove dot followed by parenthesis or null!
+
+; Pairs of pairs of pairs -- recursive data structure
+(car (cons 1 (cons 2 3)))
+(cdr (cons 1 (cons 2 3)))
+(car (cdr (cons 1 (cons 2 3))))
+(cdr (cdr (cons 1 (cons 2 3))))
+
+; Shorthand for sequence of car, cdr
+(cadr (cons 1 (cons 2 3)))
+(cddr (cons 1 (cons 2 3)))
+
+; A sequence of pairs that ends with an empty list is a proper list
+(cons 1 (cons 2 (cons 3 (cons 4 5))))
+(cons 1 (cons 2 (cons 3 (cons 4 null))))
+```
+
+<details>
+<summary>Result</summary>
+
+```
+(1 2 3 4)
+(1 2 3 4)
+(1 2 3 4)
+(1 2 3 4 5 6 7 8)
+(#<procedure:list>)
+"head"
+"tail"
+2
+(2 . 4)
+1
+(1)
+(1 2 . 3)
+"Does (cons 1 null) display (1 . null) ?"
+(1)
+"Does (cons 1 (cons 2 3)) display (1 . ( 2 . 3)) ?"
+(1 2 . 3)
+1
+(2 . 3)
+2
+3
+2
+3
+(1 2 3 4 . 5)
+(1 2 3 4)
 ```
 
 Write a `length` function to find the length of a proper list.
@@ -249,6 +317,43 @@ returns a new list with all occurrences of the object removed from the list.
 (remv 'b '(a b b d))
 (remv 'c '(a b b d))
 (remv 'd '(a b b d))
+```
+
+Scheme has two procedures for taking lists apart: `car` (returns the first element of the list) and `cdr` (returns the last element of the list).
+```
+(car '(a b c)) => a
+(cdr '(a b c)) => (b c)
+(cdr '(a)) => ()
+
+(car (cdr '(a b c))) => b
+(cdr (cdr '(a b c))) => (c)
+
+(car '((a b) (c d))) => (a b)
+(cdr '((a b) (c d))) => ((c d))
+```
+
+The procedure `cons` constructs pairs. A list is a sequence of pairs; each pair's cdr is the next pair in the sequence.
+```
+(cons 'a '()) => (a)
+(cons 'a '(b c)) => (a b c)
+(cons 'a (cons 'b (cons 'c '()))) => (a b c)
+(cons '(a b) '(c d)) => ((a b) c d)
+
+(car (cons 'a '(b c))) => a
+(cdr (cons 'a '(b c))) => (b c)
+(cons (car '(a b c))
+      (cdr '(d e f))) => (a e f)
+(cons (car '(a b c))
+      (cdr '(a b c))) => (a b c)
+```
+
+The `cdr` of the last pair in a proper list is the empty list. Otherwise, the sequence of pairs forms an improper list. More formally, the empty list is a proper list, and any pair whose `cdr` is a proper list is a proper list.
+
+An improper list is printed in dotted-pair notation, with a period, or dot, preceding the final element of the list.
+```
+(cons 'a 'b) => (a . b)
+(cdr '(a . b)) => b
+(cons 'a '(b . c)) => (a b . c)
 ```
 
 Write procedure `tree-copy` that treats the structure of pairs as a tree rather
