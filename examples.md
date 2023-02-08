@@ -366,7 +366,7 @@ returns a new list with all occurrences of the object removed from the list.
   (lambda (x lst)
     (cond
       ((null? lst) '())
-      ((eqv? x (car lst)) (cdr lst))
+      ((eqv? x (car lst)) (remv x (cdr lst)))
       (else (cons (car lst) (remv x (cdr lst)))))))
 
 (remv 'a '(a b b d))
@@ -455,6 +455,19 @@ You may assume that all sub-expressions are parenthesized so that you don’t ne
 about precedence. Also, you need only implement the four basic arithmetic functions,
 namely, plus, minus, times and divide.
 
+<details>
+<summary>Result</summary>
+
+```scheme
+(define calculator
+  (lambda (e)
+    (if (not (pair? e))
+        e
+        ((eval (cadr e)) (calculator (car e))
+                    (calculator (caddr e))))))
+```
+</details>
+
 Write a function, `infix->prefix`, which takes an infix arithmetic expression and returns the
 corresponding prefix expression.
 ```
@@ -467,6 +480,29 @@ corresponding prefix expression.
 > (infix->prefix ’((((2 + 3) * 2) / 5) + (17 - 1))
 (+ (/ (* (+ 2 3) 2) 5) (- 17 1))
 ```
+
+<details>
+<summary>Result</summary>
+
+```scheme
+(define infix->prefix
+  (lambda (expr)
+    (cond
+      ((null? expr)
+       (error "Cannot process an empty expression"))
+      ((number? expr) expr)
+      (else
+       (cons (cadr expr)                              ; operator
+             (list (infix->prefix (car expr))         ; left
+                   (infix->prefix (caddr expr)))))))) ; right
+(infix->prefix 42)
+(infix->prefix '(1 + 2))
+(infix->prefix '(1 + (2 * 8)))
+(infix->prefix '((((2 + 3) * 2) / 5) + (17 - 1)))
+(infix->prefix '())
+```
+</details>
+
 
 Define a function `iota-iota` that takes an integer i as its argument and returns a list of pairs of
 integers such that
