@@ -534,6 +534,37 @@ nested `if` expressions. For example,
 (if (> x y) (- x y) (if (< x y) (- y x) 0))
 >
 ```
+<details>
+<summary>Solution</summary>
+
+```scheme
+#lang scheme
+(require racket/trace)
+
+(define cond->if
+  (lambda (exp)
+    (cond
+      ((and (equal? (car exp) 'cond)
+            (equal? (caadr exp) 'else)) ; (cond (else c)) => c
+       (cadadr exp))
+      ((equal? (car exp) 'cond)
+       (cond->if (cdr exp)))
+      ((and (pair? (car exp)) ; (((a) (b)) (else c)) => (if (a) (b) c)
+            (equal? (caadr exp) 'else))
+       (list 'if (caar exp) (cadar exp) (cadadr exp)))
+      ((pair? (car exp)) ; (((a) (b)) ...) => (if (a) (b) ...)
+       (list 'if (caar exp) (cadar exp) (cond->if (cdr exp)))))))
+
+(trace cond->if)
+
+(cond->if '(cond ((> x y) (- x y)) ((< x y) (- y x)) (else 0)))
+;(if (> x y) (- x y) (if (< x y) (- y x) 0))
+(cond->if '(cond (else 0)))
+;0
+(cond->if '(cond ((> x y) (- x y)) (else 0)))
+;(if (> x y) (- x y) 0)
+```
+</details>
 
 Write a tail-recursive function, `cos`, which takes a number, `x`, as its argument and returns
 `cos(x)`. Your function should approximate `cos(x)` by summing the first 100 terms of the
