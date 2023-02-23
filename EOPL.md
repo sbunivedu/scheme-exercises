@@ -45,7 +45,7 @@ revised grammar from the preceding exercise. What is wrong with
 In the last line of subst-in-symbol-expression, the recursion is on se
 and not a smaller substructure. Why is the recursion guaranteed to halt?
 
-## Exercise 1.11 [*]  
+## Exercise 1.11 [*]
 Eliminate the one call to `subst-in-symbol-expression` in `subst` by replacing
 it by its definition and simplifying the resulting procedure. The result will
 be a version of `subst` that does not need `subst-in-symbol-expression`. This
@@ -370,4 +370,40 @@ and `append`.
 ```
 > (vector-append-list '#(1 2 3) '(4 5))
 #(1 2 3 4 5)
+```
+
+** Excercise 2.29 [*]
+
+```scheme
+#lang eopl
+
+(define-datatype lc-exp lc-exp?
+  (var-exp
+   (var identifier?))
+  (lambda-exp
+   (bound-vars (list-of identifier?))
+   (body lc-exp?))
+  (app-exp
+   (rator lc-exp?)
+   (rands (list-of lc-exp?))))
+
+(define identifier?
+  (lambda (x)
+    (and (symbol? x) (not (eqv? 'lambda x)))))
+
+(define parse-expression
+  (lambda (datum)
+    (cond ((symbol? datum)
+           (var-exp datum))
+          ((pair? datum)
+           (if (eqv? (car datum) 'lambda)
+               (lambda-exp (cadr datum)
+                           (parse-expression (caddr datum)))
+               (app-exp (parse-expression (car datum))
+                        (map parse-expression (cdr datum)))))
+          (else (report-invalid-concrete-syntax datum)))))
+
+(define report-invalid-concrete-syntax
+  (lambda (datum)
+    (eopl:error 'parse-expression "Syntax error: ~s" datum)))
 ```
