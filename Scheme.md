@@ -266,7 +266,13 @@ How might the primitive procedure `list` be defined?
 
 ```scheme
 (let ((mylist (lambda x x)))
-  (mylist 'a 1 #t)) => '(a 1 #t)
+  (mylist 'a 1 #t))
+; => (a 1 #t)
+
+(define list
+  (lambda x x))
+(list 1 2 3 4)
+; => (1 2 3 4)
 ```
 </details>
 
