@@ -372,38 +372,102 @@ and `append`.
 #(1 2 3 4 5)
 ```
 
-** Excercise 2.29 [*]
-
-```scheme
-#lang eopl
-
-(define-datatype lc-exp lc-exp?
-  (var-exp
-   (var identifier?))
-  (lambda-exp
-   (bound-vars (list-of identifier?))
-   (body lc-exp?))
-  (app-exp
-   (rator lc-exp?)
-   (rands (list-of lc-exp?))))
-
-(define identifier?
-  (lambda (x)
-    (and (symbol? x) (not (eqv? 'lambda x)))))
-
-(define parse-expression
-  (lambda (datum)
-    (cond ((symbol? datum)
-           (var-exp datum))
-          ((pair? datum)
-           (if (eqv? (car datum) 'lambda)
-               (lambda-exp (cadr datum)
-                           (parse-expression (caddr datum)))
-               (app-exp (parse-expression (car datum))
-                        (map parse-expression (cdr datum)))))
-          (else (report-invalid-concrete-syntax datum)))))
-
-(define report-invalid-concrete-syntax
-  (lambda (datum)
-    (eopl:error 'parse-expression "Syntax error: ~s" datum)))
+## Excercise 1.20 [*]
+`(count-occurrences s slist)` returns the number of occurrences of s in slist.
 ```
+> (count-occurrences 'x '((f x) y (((x z) x))))
+3
+> (count-occurrences 'x '((f x) y (((x z) () x))))
+3
+> (count-occurrences 'w '((f x) y (((x z) x))))
+0
+```
+<details>
+<summary>Solution</summary>
+
+```
+(define (count-occurrences s slist)
+  (cond ((null? slist) 0)
+        ((not (pair? slist))
+         (if (equal? s slist) 1 0))
+        (else
+         (+ (count-occurrences s (car slist))
+            (count-occurrences s (cdr slist))))))
+```
+</details>
+
+## Excercise 1.23 [**]
+`(list-index pred lst)` returns the 0-based position of the first element of lst that satisfies the predicate `pred`. If no element of lst satisfies the predicate, then `list-index` returns `#f`.
+
+```
+> (list-index number? '(a 2 (1 3) b 7))
+1
+> (list-index symbol? '(a (b c) 17 foo))
+0
+> (list-index symbol? '(1 2 (a b) 3))
+#f
+```
+<details>
+<summary>Solution</summary>
+
+```
+(define (list-index pred lst)
+  (list-index-i pred lst 0))
+
+(define (list-index-i pred lst i)
+  (if (null? lst)
+      #f
+      (if (pred (car lst))
+          i
+          (list-index-i pred (cdr lst) (+ i 1)))))
+```
+</details>
+
+## Excercise 1.26 [**]
+`(up lst)` removes a pair of parentheses from each top-level element of `lst`. If a top-level element is not a list, it is included in the result, as is.
+```
+> (up '((1 2) (3 4)))
+(1 2 3 4)
+> (up '((x (y)) z))
+(x (y) z)
+```
+<details>
+<summary>Solution</summary>
+
+```
+(define (up lst)
+  (cond ((null? lst) '())
+        ((pair? (car lst))
+         (append (car lst) (up (cdr lst))))
+        (else
+         (cons (car lst) (up (cdr lst))))))
+```
+</details>
+
+## Exercise 1.27 [**]
+`(flatten slist)` returns a list of the symbols contained in `slist` in the order in which they occur when `slist` is printed. Intuitively, `flatten` removes all the inner parentheses from its argument.
+```
+> (flatten '(a b c))
+(a b c)
+> (flatten '((a) () (b ()) () (c)))
+(a b c)
+> (flatten '((a b) c (((d)) e)))
+(a b c d e)
+> (flatten '(a b (() (c))))
+(a b c)
+```
+<details>
+<summary>Solution</summary>
+
+```
+(define (flatten slist)
+  (cond ((null? slist) '())
+        ((symbol? (car slist)) ; not pair nor '()
+         (cons (car slist) (flatten (cdr slist))))
+        (else
+         (append (flatten (car slist))
+                 (flatten (cdr slist))))))
+```
+</details>
+
+** Excercise 2.29 [*]
